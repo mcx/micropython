@@ -65,6 +65,7 @@
 #define MICROPY_HW_SPI2_SCK                      (pyb_pin_FLASH_SCK)
 #define MICROPY_HW_SPI2_MISO                     (pyb_pin_FLASH_MISO)
 #define MICROPY_HW_SPI2_MOSI                     (pyb_pin_FLASH_MOSI)
+#define MICROPY_HW_SPI_IS_RESERVED(id)           (id == 2)  // Reserve SPI flash bus.
 
 // USB config
 #define MICROPY_HW_USB_VBUS_DETECT_PIN           (pyb_pin_USB_VBUS)
@@ -101,7 +102,7 @@
     spi_bdev_ioctl(&spi_bdev, (op), (arg)) \
     )
 
-// Configuration for stardard block protocol (block size FLASH_BLOCK_SIZE).
+// Configuration for standard block protocol (block size FLASH_BLOCK_SIZE).
 #define MICROPY_HW_BDEV_READBLOCKS(dest, bl, n) \
     spi_bdev_readblocks(&spi_bdev, (dest), MICROPY_HW_SPIFLASH_BLOCKMAP(bl), (n))
 #define MICROPY_HW_BDEV_WRITEBLOCKS(src, bl, n) \
