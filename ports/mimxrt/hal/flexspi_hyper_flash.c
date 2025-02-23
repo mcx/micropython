@@ -9,6 +9,9 @@
 #include "fsl_clock.h"
 #include "flexspi_hyper_flash.h"
 
+void flexspi_nor_update_lut_clk(uint32_t freq_index) {
+}
+
 // Copy of a few (pseudo-)functions from fsl_clock.h, which were nor reliably
 // inlined when they should be. That caused DEBUG mode to fail.
 // It does not increase the code size, since they were supposed to be inline.
@@ -173,6 +176,11 @@ status_t flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address) {
     status = flexspi_nor_wait_bus_busy(base);
 
     return status;
+}
+
+status_t flexspi_nor_flash_erase_block(FLEXSPI_Type *base, uint32_t address) __attribute__((section(".ram_functions")));
+status_t flexspi_nor_flash_erase_block(FLEXSPI_Type *base, uint32_t address) {
+    return flexspi_nor_flash_erase_sector(base, address);  // HyperFlash does not support block erase!
 }
 
 status_t flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t address, const uint32_t *src,  uint32_t size) __attribute__((section(".ram_functions")));

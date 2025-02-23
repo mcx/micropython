@@ -19,6 +19,10 @@ Classes
     array are given by *iterable*. If it is not provided, an empty
     array is created.
 
+    In addition to the methods below, array objects also implement the buffer
+    protocol. This means the contents of the entire array can be accessed as raw
+    bytes via a `memoryview` or other interfaces which use this protocol.
+
     .. method:: append(val)
 
         Append new element *val* to the end of array, growing it.
@@ -75,7 +79,7 @@ Classes
         Returns the string representation of the array, called as ``str(a)`` or ``repr(a)```
         (where ``a`` is an ``array``).  Returns the string ``"array(<type>, [<elements>])"``,
         where ``<type>`` is the type code letter for the array and ``<elements>`` is a comma
-        seperated list of the elements of the array.
+        separated list of the elements of the array.
 
         **Note:** ``__repr__`` cannot be called directly (``a.__repr__()`` fails) and
         is not present in ``__dict__``, however ``str(a)`` and ``repr(a)`` both work.

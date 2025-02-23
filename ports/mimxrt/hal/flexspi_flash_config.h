@@ -75,6 +75,12 @@
     (FLEXSPI_LUT_OPERAND0(op0) | FLEXSPI_LUT_NUM_PADS0(pad0) | FLEXSPI_LUT_OPCODE0(cmd0) | FLEXSPI_LUT_OPERAND1(op1) | \
     FLEXSPI_LUT_NUM_PADS1(pad1) | FLEXSPI_LUT_OPCODE1(cmd1))
 
+#define EMPTY_LUT_SEQ \
+    FLEXSPI_LUT_SEQ(0, 0, 0, 0, 0, 0), \
+    FLEXSPI_LUT_SEQ(0, 0, 0, 0, 0, 0), \
+    FLEXSPI_LUT_SEQ(0, 0, 0, 0, 0, 0), \
+    FLEXSPI_LUT_SEQ(0, 0, 0, 0, 0, 0), \
+
 // !@brief Definitions for FlexSPI Serial Clock Frequency
 typedef enum _FlexSpiSerialClockFreq
 {
@@ -123,7 +129,7 @@ enum
     kFlexSpiDeviceType_SerialNAND   = 2,    // !< Flash devices are Serial NAND
     kFlexSpiDeviceType_SerialRAM    = 3,    // !< Flash devices are Serial RAM/HyperFLASH
     kFlexSpiDeviceType_MCP_NOR_NAND = 0x12, // !< Flash device is MCP device, A1 is Serial NOR, A2 is Serial NAND
-    kFlexSpiDeviceType_MCP_NOR_RAM  = 0x13, // !< Flash deivce is MCP device, A1 is Serial NOR, A2 is Serial RAMs
+    kFlexSpiDeviceType_MCP_NOR_RAM  = 0x13, // !< Flash device is MCP device, A1 is Serial NOR, A2 is Serial RAMs
 };
 
 // !@brief Flash Pad Definitions
@@ -184,7 +190,7 @@ typedef struct _FlexSPIConfig
     // ! details
     uint8_t deviceType;    // !< [0x044-0x044] Device Type:  See Flash Type Definition for more details
     uint8_t sflashPadType; // !< [0x045-0x045] Serial Flash Pad Type: 1 - Single, 2 - Dual, 4 - Quad, 8 - Octal
-    uint8_t serialClkFreq; // !< [0x046-0x046] Serial Flash Frequencey, device specific definitions, See System Boot
+    uint8_t serialClkFreq; // !< [0x046-0x046] Serial Flash Frequency, device specific definitions, See System Boot
     // ! Chapter for more details
     uint8_t lutCustomSeqEnable; // !< [0x047-0x047] LUT customization Enable, it is required if the program/erase cannot
     // ! be done using 1 LUT sequence, currently, only applicable to HyperFLASH
@@ -209,19 +215,20 @@ typedef struct _FlexSPIConfig
 } flexspi_mem_config_t;
 
 /*  */
-#define NOR_CMD_LUT_SEQ_IDX_READ_NORMAL 0
+#define NOR_CMD_LUT_SEQ_IDX_READ 0
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUSREG 1
-#define NOR_CMD_LUT_SEQ_IDX_READ_FAST_QUAD 2
+#define NOR_CMD_LUT_SEQ_IDX_READSTATUS_XPI 2
 #define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE 3
-#define NOR_CMD_LUT_SEQ_IDX_READSTATUS_XPI 4
+#define NOR_CMD_LUT_SEQ_IDX_WRITESTATUSREG 4
 #define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR 5
-#define NOR_CMD_LUT_SEQ_IDX_WRITESTATUSREG 6
-#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_QUAD 7
-#define NOR_CMD_LUT_SEQ_IDX_READID 8
+#define NOR_CMD_LUT_SEQ_IDX_READQUAD 6
+#define NOR_CMD_LUT_SEQ_IDX_READID 7
+#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK 8
 #define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM 9
-#define NOR_CMD_LUT_SEQ_IDX_ENTERQPI 10
+#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_QUAD 10
 #define NOR_CMD_LUT_SEQ_IDX_CHIPERASE 11
-#define NOR_CMD_LUT_SEQ_IDX_EXITQPI 12
+// Index 12 is left empty
+#define NOR_CMD_LUT_SEQ_IDX_READ_SFDP 13
 
 #define HYPERFLASH_CMD_LUT_SEQ_IDX_READDATA    0
 #define HYPERFLASH_CMD_LUT_SEQ_IDX_WRITEDATA   1
@@ -245,7 +252,7 @@ typedef struct _flexspi_nor_config
     uint8_t serialNorType;          // !< Serial NOR Flash type: 0/1/2/3
     uint8_t needExitNoCmdMode;      // !< Need to exit NoCmd mode before other IP command
     uint8_t halfClkForNonReadCmd;   // !< Half the Serial Clock for non-read command: true/false
-    uint8_t needRestoreNoCmdMode;   // !< Need to Restore NoCmd mode after IP commmand execution
+    uint8_t needRestoreNoCmdMode;   // !< Need to Restore NoCmd mode after IP command execution
     uint32_t blockSize;             // !< Block size
     uint32_t reserve2[11];          // !< Reserved for future use
 } flexspi_nor_config_t;

@@ -4,8 +4,10 @@
     ],
     "docs": "",
     "features": [],
-    "images": [],
-    "mcu": "stm32",
+    "images": [
+        "nucleo_h743zi2.jpg"
+    ],
+    "mcu": "stm32h7",
     "product": "Nucleo H743ZI2",
     "thumbnail": "",
     "url": "",

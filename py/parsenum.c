@@ -36,7 +36,7 @@
 #include <math.h>
 #endif
 
-STATIC NORETURN void raise_exc(mp_obj_t exc, mp_lexer_t *lex) {
+static NORETURN void raise_exc(mp_obj_t exc, mp_lexer_t *lex) {
     // if lex!=NULL then the parser called us and we need to convert the
     // exception's type from ValueError to SyntaxError and add traceback info
     if (lex != NULL) {
@@ -151,13 +151,13 @@ value_error:
         raise_exc(exc, lex);
         #elif MICROPY_ERROR_REPORTING == MICROPY_ERROR_REPORTING_NORMAL
         mp_obj_t exc = mp_obj_new_exception_msg_varg(&mp_type_ValueError,
-            MP_ERROR_TEXT("invalid syntax for integer with base %d"), base);
+            MP_ERROR_TEXT("invalid syntax for integer with base %d"), base == 1 ? 0 : base);
         raise_exc(exc, lex);
         #else
         vstr_t vstr;
         mp_print_t print;
         vstr_init_print(&vstr, 50, &print);
-        mp_printf(&print, "invalid syntax for integer with base %d: ", base);
+        mp_printf(&print, "invalid syntax for integer with base %d: ", base == 1 ? 0 : base);
         mp_str_print_quoted(&print, str_val_start, top - str_val_start, true);
         mp_obj_t exc = mp_obj_new_exception_arg1(&mp_type_ValueError,
             mp_obj_new_str_from_utf8_vstr(&vstr));
@@ -214,7 +214,7 @@ static void accept_digit(mp_float_t *p_dec_val, int dig, int *p_exp_extra, int i
         }
     }
 }
-#endif // MICROPY_BUILTINS_FLOAT
+#endif // MICROPY_PY_BUILTINS_FLOAT
 
 #if MICROPY_PY_BUILTINS_COMPLEX
 mp_obj_t mp_parse_num_decimal(const char *str, size_t len, bool allow_imag, bool force_complex, mp_lexer_t *lex)

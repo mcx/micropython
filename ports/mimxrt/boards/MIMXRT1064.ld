@@ -3,24 +3,16 @@
 reserved_size = MICROPY_HW_FLASH_RESERVED;
 #endif
 
-#if MICROPY_HW_FLASH_TYPE == qspi_nor_flash
-flash_start         = 0x60000000;
-#elif MICROPY_HW_FLASH_TYPE == qspi_hyper_flash
-flash_start         = 0x60000000;
-#elif MICROPY_HW_FLASH_TYPE == internal
-flash_start         = 0x70000000;
-#else
-#error Unknown MICROPY_HW_FLASH_TYPE
-#endif
+flash_start         = MICROPY_HW_FLASH_BASE;
 flash_size          = MICROPY_HW_FLASH_SIZE;
 flash_end           = DEFINED(reserved_size) ? ((flash_start) + (flash_size - reserved_size)) : ((flash_start) + (flash_size));
 flash_config_start  = flash_start;
 flash_config_size   = 0x00001000;
 ivt_start           = flash_start + 0x00001000;
 ivt_size            = 0x00001000;
-interrupts_start    = flash_start + 0x00002000;
+interrupts_start    = flash_start + 0x0000C000;
 interrupts_size     = 0x00000400;
-text_start          = flash_start + 0x00002400;
+text_start          = flash_start + 0x0000C400;
 vfs_start           = flash_start + 0x00100000;
 text_size           = ((vfs_start) - (text_start));
 vfs_size            = ((flash_end) - (vfs_start));

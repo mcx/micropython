@@ -86,8 +86,8 @@ bool can_init(pyb_can_obj_t *can_obj, uint32_t mode, uint32_t prescaler, uint32_
     init->DataSyncJumpWidth = 1;
     init->DataTimeSeg1 = 1;
     init->DataTimeSeg2 = 1;
-    init->StdFiltersNbr = 28; // /2  ? if FDCAN2 is used !!?
-    init->ExtFiltersNbr = 0; // Not used
+    init->StdFiltersNbr = 28;
+    init->ExtFiltersNbr = 8;
     init->TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
     #elif defined(STM32H7)
     // The dedicated FDCAN RAM is 2560 32-bit words and shared between the FDCAN instances.
@@ -137,7 +137,7 @@ bool can_init(pyb_can_obj_t *can_obj, uint32_t mode, uint32_t prescaler, uint32_
     #endif
 
     FDCAN_GlobalTypeDef *CANx = NULL;
-    const pin_obj_t *pins[2];
+    const machine_pin_obj_t *pins[2];
 
     switch (can_obj->can_id) {
         #if defined(MICROPY_HW_CAN1_TX)
@@ -340,7 +340,7 @@ int can_receive(FDCAN_HandleTypeDef *can, int fifo, FDCAN_RxHeaderTypeDef *hdr, 
     return 0; // success
 }
 
-STATIC void can_rx_irq_handler(uint can_id, uint fifo_id) {
+static void can_rx_irq_handler(uint can_id, uint fifo_id) {
     mp_obj_t callback;
     pyb_can_obj_t *self;
     mp_obj_t irq_reason = MP_OBJ_NEW_SMALL_INT(0);
